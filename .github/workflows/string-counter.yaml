@@ -1,0 +1,58 @@
+name: Count String with Mobile Alert
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: 'URL to check'
+        required: true
+        default: 'https://example.com'
+      search_query:
+        description: 'String to count'
+        required: true
+        default: 'Example'
+      threshold:
+        description: 'Min occurrences before alerting'
+        required: true
+        default: '1'
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  check-webpage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run Counter Script
+        id: counter_step
+        env:
+          TARGET_URL: ${{ github.event.inputs.url || 'https://example.com' }}
+          SEARCH_STRING: ${{ github.event.inputs.search_query || 'Example' }}
+          THRESHOLD: ${{ github.event.inputs.threshold || '1' }}
+        run: |
+          # Capture the output to see if it failed
+          OUTPUT=$(python count_string.py)
+          echo "$OUTPUT"
+          
+          # Check if the script indicated a failure
+          if echo "$OUTPUT" | grep -q "STATUS=FAIL"; then
+            echo "IS_ALERT=true" >> $GITHUB_ENV
+          else
+            echo "IS_ALERT=false" >> $GITHUB_ENV
+          fi
+
+      - name: Check Threshold and Alert
+        if: env.IS_ALERT == 'true'
+        run: |
+          echo "::error title=Threshold Alert::The count for the searched string is below the required threshold."
+          exit 1 # This failure triggers the GitHub Mobile notification

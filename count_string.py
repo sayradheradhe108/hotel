@@ -44,8 +44,8 @@ def count_occurrences(url, search_string, threshold):
         sys.exit(1)
 
 if __name__ == "__main__":
-    target_url = os.getenv('https://gmvnonline.com/room-tariff.php?trhID=59&checkindate=23-04-2026&checkoutdate=24-04-2026&adults=&child=')
-    search_str = os.getenv('not available in selected dates')
+    target_url = os.getenv('TARGET_URL')
+    search_str = os.getenv('SEARCH_STRING')
     limit = int(os.getenv('THRESHOLD', 1))
     
     if not target_url or not search_str:

@@ -16,7 +16,7 @@ on:
         required: true
         default: '1'
   schedule:
-    - cron: '0 0 * * *'
+    - cron: '41 16 * * *'
 
 jobs:
   check-webpage:

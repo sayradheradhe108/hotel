@@ -6,17 +6,17 @@ on:
       url:
         description: 'URL to check'
         required: true
-        default: 'https://example.com'
+        default: 'https://gmvnonline.com/room-tariff.php?trhID=59&checkindate=23-04-2026&checkoutdate=24-04-2026&adults=&child='
       search_query:
         description: 'String to count'
         required: true
-        default: 'Example'
+        default: 'not available in selected dates'
       threshold:
         description: 'Min occurrences before alerting'
         required: true
-        default: '1'
+        default: '2'
   schedule:
-    - cron: '41 16 * * *'
+    - cron: '55 16 * * *'
 
 jobs:
   check-webpage:
